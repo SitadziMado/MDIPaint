@@ -68,5 +68,16 @@ namespace MDIPaint
                 ((ChildForm)active).Redo();
             }
         }
+
+        private void MainFormMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            var active = ActiveMdiChild;
+            
+            if (active != null)
+            {
+                var child = (ChildForm)active;
+
+            }
+        }
     }
 }

@@ -84,6 +84,7 @@
             this.MainFormMenuStrip.Size = new System.Drawing.Size(624, 24);
             this.MainFormMenuStrip.TabIndex = 1;
             this.MainFormMenuStrip.Text = "File";
+            this.MainFormMenuStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.MainFormMenuStrip_ItemClicked);
             // 
             // файлToolStripMenuItem
             // 

@@ -12,11 +12,15 @@ namespace MDIPaint
 {
     public partial class ChildForm : Form
     {
+        public bool CanUndo => mCurrentBuffer.Previous != null;
+        public bool CanRedo => mCurrentBuffer.Next != null;
+        public bool IsModified { get; internal set; }
+
         private const int RestorationPointMax = 64;
 
-        private bool mIsModified;
         private bool mNeedBackup = false;
         private bool mDraw = true;
+        private bool mResized = false;
         private LinkedList<Bitmap> mBuffers = new LinkedList<Bitmap>();
         private LinkedListNode<Bitmap> mCurrentBuffer;
         private Graphics mBackBuffer;
@@ -60,6 +64,8 @@ namespace MDIPaint
 
             if (mBuffers.Count > RestorationPointMax)
                 mBuffers.RemoveFirst();
+
+            Text = mBuffers.Count.ToString();
         }
 
         private void Redraw()
@@ -70,7 +76,12 @@ namespace MDIPaint
         private void ChangeBitmapSize()
         {
             AddRestorationPoint();
-            mBuffers.AddLast(new Bitmap(mCurrentBuffer.Value, Width, Height));
+            var bmp = new Bitmap(Canvas.Width, Canvas.Height);
+            var grp = Graphics.FromImage(bmp);
+            grp.DrawImage(mCurrentBuffer.Value, 0, 0);
+            mBuffers.RemoveLast();
+            mBuffers.AddLast(bmp);
+            
             mCurrentBuffer = mBuffers.Last;
             UpdateGraphics();
         }
@@ -83,7 +94,7 @@ namespace MDIPaint
                 mNeedBackup = false;
             }
 
-            mIsModified = true;
+            IsModified = true;
             mBackBuffer.DrawLine(Pens.Black, mPrevious, next);
             mPrevious = next;
         }
@@ -91,6 +102,7 @@ namespace MDIPaint
         private void UpdateGraphics()
         {
             mBackBuffer = Graphics.FromImage(mCurrentBuffer.Value);
+            Canvas.Size = mCurrentBuffer.Value.Size;
         }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
@@ -114,6 +126,7 @@ namespace MDIPaint
                 }
                 else
                 {
+                    mResized = true;
                     Canvas.Width += e.X - mPrevious.X;
                     Canvas.Height += e.Y - mPrevious.Y;
                 }
@@ -137,6 +150,12 @@ namespace MDIPaint
 
         private void Canvas_MouseUp(object sender, MouseEventArgs e)
         {
+            if (mResized)
+            {
+                ChangeBitmapSize();
+                mResized = false;
+            }
+
             mNeedBackup = false;
             mPrevious = e.Location;
         }
