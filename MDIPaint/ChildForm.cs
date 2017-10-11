@@ -12,6 +12,7 @@ namespace MDIPaint
 {
     public partial class ChildForm : Form
     {
+        public Bitmap Image => mCurrentBuffer.Value;
         public bool CanUndo => mCurrentBuffer.Previous != null;
         public bool CanRedo => mCurrentBuffer.Next != null;
         public bool IsModified { get; internal set; }
