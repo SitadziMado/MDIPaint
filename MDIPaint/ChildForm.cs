@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace MDIPaint
         public Bitmap Image => mCurrentBuffer.Value;
         public bool CanUndo => mCurrentBuffer.Previous != null;
         public bool CanRedo => mCurrentBuffer.Next != null;
-        public bool IsModified { get; internal set; }
+        public bool IsChanged { get; internal set; }
 
         private const int RestorationPointMax = 64;
 
@@ -26,6 +27,10 @@ namespace MDIPaint
         private LinkedListNode<Bitmap> mCurrentBuffer;
         private Graphics mBackBuffer;
         private Point mPrevious;
+        private string mFilename = "";
+
+        private Point mStartPt;
+        private Point mFinishPt;
 
         public ChildForm()
         {
@@ -52,6 +57,25 @@ namespace MDIPaint
                 mCurrentBuffer = mCurrentBuffer.Next;
                 UpdateGraphics();
                 Redraw();
+            }
+        }
+
+        public DialogResult SaveAs()
+        {
+            return SaveImageDialog.ShowDialog();
+        }
+
+        public DialogResult Save()
+        {
+            if (mFilename != "")
+            {
+                Image.Save(mFilename);
+                IsChanged = false;
+                return DialogResult.OK;
+            }
+            else
+            {
+                return SaveAs();
             }
         }
 
@@ -95,8 +119,38 @@ namespace MDIPaint
                 mNeedBackup = false;
             }
 
-            IsModified = true;
-            mBackBuffer.DrawLine(Pens.Black, mPrevious, next);
+            IsChanged = true;
+
+            MainForm parent = (MainForm)ParentForm;
+
+            switch (parent.Instrument)
+            {
+                case InstrumentType.Pencil:
+                    mBackBuffer.DrawLine(parent.Pen, mPrevious, next);
+                    break;
+
+                case InstrumentType.Eraser:
+                    break;
+
+                case InstrumentType.Line:
+                    break;
+
+                case InstrumentType.Ellipse:
+                    break;
+
+                case InstrumentType.Star:
+                    break;
+                case InstrumentType.ScaleUp:
+                    break;
+
+                case InstrumentType.ScaleDown:
+                    break;
+
+                default:
+                    break;
+            }
+
+
             mPrevious = next;
         }
 
@@ -111,6 +165,7 @@ namespace MDIPaint
             if (e.Button == MouseButtons.Left)
             {
                 mNeedBackup = true;
+                mStartPt = e.Location;
             }
 
             mPrevious = e.Location;
@@ -128,8 +183,8 @@ namespace MDIPaint
                 else
                 {
                     mResized = true;
-                    Canvas.Width += e.X - mPrevious.X;
-                    Canvas.Height += e.Y - mPrevious.Y;
+                    Canvas.Width = Math.Max(7, Canvas.Width + e.X - mPrevious.X);
+                    Canvas.Height = Math.Max(7, Canvas.Height + e.Y - mPrevious.Y);
                 }
             }
             else if (e.Button == MouseButtons.None)
@@ -168,6 +223,48 @@ namespace MDIPaint
         
         private void Canvas_Resize(object sender, EventArgs e)
         {
+        }
+
+        private void ChildForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var result = DialogResult.No;
+
+            if (IsChanged)
+            {
+                result = MessageBox.Show(
+                    "Изображение было изменено. Сохранить изменения?",
+                    "Сохранить изменения?",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Information
+                );
+            }
+
+            switch (result)
+            {
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    break;
+
+                case DialogResult.Yes:
+                    result = SaveAs();
+                    if (result == DialogResult.Cancel)
+                        e.Cancel = true;
+                    break;
+
+                case DialogResult.No:
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        "Неверный код возврата от диалогового окна."
+                    );
+            }
+        }
+
+        private void SaveImageDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            mFilename = SaveImageDialog.FileName;
+            Save();
         }
     }
 }
