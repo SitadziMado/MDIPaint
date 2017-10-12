@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace MDIPaint
         public bool IsChanged { get; internal set; }
 
         private const int RestorationPointMax = 64;
+        private const double ScaleIncrease = 0.1;
 
         private bool mNeedBackup = false;
         private bool mDraw = true;
@@ -27,10 +29,11 @@ namespace MDIPaint
         private LinkedListNode<Bitmap> mCurrentBuffer;
         private Graphics mBackBuffer;
         private Point mPrevious;
-        private string mFilename = "";
+        private string mFilename = String.Empty;
 
         private Point mStartPt;
         private Point mFinishPt;
+        private double mScaleFactor = 1.0;
 
         public ChildForm()
         {
@@ -38,6 +41,7 @@ namespace MDIPaint
             mBuffers.AddLast(new Bitmap(Width, Height));
             mCurrentBuffer = mBuffers.Last;
             UpdateGraphics();
+            MouseWheel += ChildForm_MouseWheel;
         }
 
         public void Undo()
@@ -71,12 +75,30 @@ namespace MDIPaint
             {
                 Image.Save(mFilename);
                 IsChanged = false;
+                Text = mFilename;
                 return DialogResult.OK;
             }
             else
             {
                 return SaveAs();
             }
+        }
+
+        public void Zoom(bool expand)
+        {
+            if (expand)
+                mScaleFactor += ScaleIncrease;
+            else
+                mScaleFactor -= ScaleIncrease;
+
+            FitContents();
+            Redraw();
+        }
+
+        private void FitContents()
+        {
+            Canvas.Width = Scale(mCurrentBuffer.Value.Width);
+            Canvas.Height = Scale(mCurrentBuffer.Value.Height);
         }
 
         private void AddRestorationPoint()
@@ -89,8 +111,6 @@ namespace MDIPaint
 
             if (mBuffers.Count > RestorationPointMax)
                 mBuffers.RemoveFirst();
-
-            Text = mBuffers.Count.ToString();
         }
 
         private void Redraw()
@@ -101,7 +121,7 @@ namespace MDIPaint
         private void ChangeBitmapSize()
         {
             AddRestorationPoint();
-            var bmp = new Bitmap(Canvas.Width, Canvas.Height);
+            var bmp = new Bitmap(Unscale(Canvas.Width), Unscale(Canvas.Height));
             var grp = Graphics.FromImage(bmp);
             grp.DrawImage(mCurrentBuffer.Value, 0, 0);
             mBuffers.RemoveLast();
@@ -110,7 +130,7 @@ namespace MDIPaint
             mCurrentBuffer = mBuffers.Last;
             UpdateGraphics();
         }
-
+        
         private void StrikeTo(Point next)
         {
             if (mNeedBackup)
@@ -126,7 +146,11 @@ namespace MDIPaint
             switch (parent.Instrument)
             {
                 case InstrumentType.Pencil:
-                    mBackBuffer.DrawLine(parent.Pen, mPrevious, next);
+                    mBackBuffer.DrawLine(
+                        parent.Pen,
+                        Unscale(mPrevious),
+                        Unscale(next)
+                    );
                     break;
 
                 case InstrumentType.Eraser:
@@ -150,14 +174,45 @@ namespace MDIPaint
                     break;
             }
 
-
             mPrevious = next;
         }
 
         private void UpdateGraphics()
         {
+            //Canvas.Image = mCurrentBuffer.Value;
             mBackBuffer = Graphics.FromImage(mCurrentBuffer.Value);
-            Canvas.Size = mCurrentBuffer.Value.Size;
+
+            mBackBuffer.CompositingQuality = CompositingQuality.AssumeLinear;
+            mBackBuffer.InterpolationMode = InterpolationMode.Low;
+            mBackBuffer.SmoothingMode = SmoothingMode.None;
+
+            FitContents();
+        }
+
+        private int Scale(int coordinate)
+        {
+            return (int)(coordinate * mScaleFactor);
+        }
+
+        private int Unscale(int coordinate)
+        {
+            return (int)(coordinate / mScaleFactor);
+        }
+
+        private Point Scale(Point coordinates)
+        {
+            return new Point(
+                (int)(coordinates.X * mScaleFactor), 
+                (int)(coordinates.Y * mScaleFactor)
+            );
+        }
+
+        private Point Unscale(Point coordinates)
+        {
+            return new Point(
+                (int)(coordinates.X / mScaleFactor),
+                (int)(coordinates.Y / mScaleFactor)
+            );
         }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
@@ -218,11 +273,23 @@ namespace MDIPaint
 
         private void Canvas_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(mCurrentBuffer.Value, 0, 0);
+            var bmp = mCurrentBuffer.Value;
+
+            e.Graphics.CompositingQuality = CompositingQuality.AssumeLinear;
+            e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+            e.Graphics.SmoothingMode = SmoothingMode.None;
+            
+            e.Graphics.DrawImage(bmp, 0, 0, Scale(bmp.Width), Scale(bmp.Height));
         }
-        
+
         private void Canvas_Resize(object sender, EventArgs e)
         {
+        }
+
+        private void ChildForm_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if ((ModifierKeys & Keys.Alt) != 0)
+                Zoom(e.Delta >= 0);
         }
 
         private void ChildForm_FormClosing(object sender, FormClosingEventArgs e)

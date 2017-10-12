@@ -39,6 +39,7 @@
             this.Canvas.Location = new System.Drawing.Point(0, 0);
             this.Canvas.Name = "Canvas";
             this.Canvas.Size = new System.Drawing.Size(272, 250);
+            this.Canvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Canvas.TabIndex = 0;
             this.Canvas.TabStop = false;
             this.Canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.Canvas_Paint);
@@ -58,6 +59,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(330, 318);
             this.Controls.Add(this.Canvas);
             this.Name = "ChildForm";
