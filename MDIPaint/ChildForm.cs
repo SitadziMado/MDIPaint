@@ -22,6 +22,7 @@ namespace MDIPaint
         private const int RestorationPointMax = 64;
         private const double ScaleIncrease = 0.1;
 
+        private MainForm mParent;
         private bool mNeedBackup = false;
         private bool mDraw = true;
         private bool mResized = false;
@@ -141,38 +142,11 @@ namespace MDIPaint
 
             IsChanged = true;
 
-            MainForm parent = (MainForm)ParentForm;
-
-            switch (parent.Instrument)
-            {
-                case InstrumentType.Pencil:
-                    mBackBuffer.DrawLine(
-                        parent.Pen,
-                        Unscale(mPrevious),
-                        Unscale(next)
-                    );
-                    break;
-
-                case InstrumentType.Eraser:
-                    break;
-
-                case InstrumentType.Line:
-                    break;
-
-                case InstrumentType.Ellipse:
-                    break;
-
-                case InstrumentType.Star:
-                    break;
-                case InstrumentType.ScaleUp:
-                    break;
-
-                case InstrumentType.ScaleDown:
-                    break;
-
-                default:
-                    break;
-            }
+            mParent.Tool.Draw(
+                mBackBuffer, 
+                Unscale(mPrevious),
+                Unscale(next)
+            );
 
             mPrevious = next;
         }
@@ -332,6 +306,11 @@ namespace MDIPaint
         {
             mFilename = SaveImageDialog.FileName;
             Save();
+        }
+
+        private void ChildForm_Load(object sender, EventArgs e)
+        {
+            mParent = (MainForm)ParentForm;
         }
     }
 }

@@ -65,6 +65,7 @@
             this.Name = "ChildForm";
             this.Text = "ChildForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChildForm_FormClosing);
+            this.Load += new System.EventHandler(this.ChildForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).EndInit();
             this.ResumeLayout(false);
 

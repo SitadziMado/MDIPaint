@@ -7,27 +7,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MDIPaint.Tools;
 
 namespace MDIPaint
 {
     public partial class MainForm : Form
     {
-        public InstrumentType Instrument { get; set; }
-        public Pen Pen { get; set; }
+        // public InstrumentType Instrument { get; set; }
+        // public Pen Pen { get; set; }
+        public Tool Tool { get; internal set; }
 
         private int mChildrenSoFar = 0;
         private LinkedList<ChildForm> mChildren = new LinkedList<ChildForm>();
-        private ToolStripButton mPreviouslySelected;
+        private RadioButton mPreviouslySelected;
+
+        private Dictionary<string, Tool> mToolbox = new Dictionary<string, Tool>
+        {
+            { "Pencil", new Pencil(Color.Black) },
+            { "Brush", new Tools.BrushTool(Color.Black) },
+            // { "Line", new Line(Color.Black) },
+            // { "Star", new Star(Color.Black) },
+            // { "Ellipse", new Ellipse(Color.Black) },
+            // { "Eraser", new Eraser(Color.Black) },
+            // { "ScaleIn", new ScaleIn(Color.Black) },
+            // { "ScaleOut", new ScaleOut(Color.Black) },
+        };
 
         public MainForm()
         {
             InitializeComponent();
-            mPreviouslySelected = InstrumentPencil;
+            mPreviouslySelected = PencilRadio;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Pen = Pens.Black;
+            Tool = mToolbox["Pencil"];
         }
 
         private void MenuNew_Click(object sender, EventArgs e)
@@ -52,9 +66,7 @@ namespace MDIPaint
 
         private void Instruments_Click(object sender, EventArgs e)
         {
-            mPreviouslySelected.Checked = false;
-            mPreviouslySelected = (ToolStripButton)sender;
-            mPreviouslySelected.Checked = true;
+            Tool = mToolbox[(string)((Control)sender).Tag];
         }
 
         private void MenuItemUndo_Click(object sender, EventArgs e)
@@ -135,6 +147,12 @@ namespace MDIPaint
         private void MenuItemClose_Click(object sender, EventArgs e)
         {
             ActiveMdiChild?.Close();
+        }
+
+        private void ThicknessText_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar < '0' || e.KeyChar > '9')
+                e.Handled = true;
         }
     }
 }
