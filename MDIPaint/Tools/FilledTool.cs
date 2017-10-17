@@ -14,18 +14,14 @@ namespace MDIPaint.Tools
         {
         }
 
-        public override Color Color
+        public Color FillColor
         {
-            get => base.Color;
-            set
-            {
-                base.Color = value;
-                brush = new SolidBrush(value);
-            }
+            get => brush.Color;
+            set => brush.Color = value;
         }
 
         public bool Fill { get; set; }
 
-        protected Brush brush;
+        protected SolidBrush brush = new SolidBrush(Color.Black);
     }
 }

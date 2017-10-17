@@ -32,6 +32,7 @@
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
             System.Windows.Forms.Label label1;
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.FillColorButton = new System.Windows.Forms.Button();
             this.ScaleOutRadio = new System.Windows.Forms.RadioButton();
             this.ScaleInRadio = new System.Windows.Forms.RadioButton();
             this.EraserRadio = new System.Windows.Forms.RadioButton();
@@ -42,6 +43,7 @@
             this.PencilRadio = new System.Windows.Forms.RadioButton();
             this.ThicknessText = new System.Windows.Forms.TextBox();
             this.FillCheck = new System.Windows.Forms.CheckBox();
+            this.BorderColorButton = new System.Windows.Forms.Button();
             this.MainFormMenuStrip = new System.Windows.Forms.MenuStrip();
             this.MenuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +79,7 @@
             this.MenuItemArrange = new System.Windows.Forms.ToolStripMenuItem();
             this.помощьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ColorDialog = new System.Windows.Forms.ColorDialog();
             panel1 = new System.Windows.Forms.Panel();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             label1 = new System.Windows.Forms.Label();
@@ -100,6 +103,7 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.FillColorButton, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.ScaleOutRadio, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.ScaleInRadio, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.EraserRadio, 1, 2);
@@ -110,6 +114,7 @@
             this.tableLayoutPanel1.Controls.Add(this.PencilRadio, 0, 0);
             this.tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.FillCheck, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.BorderColorButton, 0, 6);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -125,6 +130,17 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(109, 538);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
+            // FillColorButton
+            // 
+            this.FillColorButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.FillColorButton.BackColor = System.Drawing.Color.White;
+            this.FillColorButton.Location = new System.Drawing.Point(57, 320);
+            this.FillColorButton.Name = "FillColorButton";
+            this.FillColorButton.Size = new System.Drawing.Size(48, 48);
+            this.FillColorButton.TabIndex = 14;
+            this.FillColorButton.UseVisualStyleBackColor = false;
+            this.FillColorButton.Click += new System.EventHandler(this.FillColorButton_Click);
+            // 
             // ScaleOutRadio
             // 
             this.ScaleOutRadio.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -139,7 +155,7 @@
             this.ScaleOutRadio.Text = "-";
             this.ScaleOutRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ScaleOutRadio.UseVisualStyleBackColor = true;
-            this.ScaleOutRadio.CheckedChanged += new System.EventHandler(this.Instruments_Click);
+            this.ScaleOutRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // ScaleInRadio
             // 
@@ -155,7 +171,7 @@
             this.ScaleInRadio.Text = "+";
             this.ScaleInRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ScaleInRadio.UseVisualStyleBackColor = true;
-            this.ScaleInRadio.CheckedChanged += new System.EventHandler(this.Instruments_Click);
+            this.ScaleInRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // EraserRadio
             // 
@@ -171,7 +187,7 @@
             this.EraserRadio.Text = "%";
             this.EraserRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.EraserRadio.UseVisualStyleBackColor = true;
-            this.EraserRadio.CheckedChanged += new System.EventHandler(this.Instruments_Click);
+            this.EraserRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // EllipseRadio
             // 
@@ -187,7 +203,7 @@
             this.EllipseRadio.Text = "";
             this.EllipseRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.EllipseRadio.UseVisualStyleBackColor = true;
-            this.EllipseRadio.CheckedChanged += new System.EventHandler(this.Instruments_Click);
+            this.EllipseRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // StarRadio
             // 
@@ -203,7 +219,7 @@
             this.StarRadio.Text = "«";
             this.StarRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.StarRadio.UseVisualStyleBackColor = true;
-            this.StarRadio.CheckedChanged += new System.EventHandler(this.Instruments_Click);
+            this.StarRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // LineRadio
             // 
@@ -219,7 +235,7 @@
             this.LineRadio.Text = "k";
             this.LineRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.LineRadio.UseVisualStyleBackColor = true;
-            this.LineRadio.CheckedChanged += new System.EventHandler(this.Instruments_Click);
+            this.LineRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // BrushRadio
             // 
@@ -235,7 +251,7 @@
             this.BrushRadio.Text = "#";
             this.BrushRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.BrushRadio.UseVisualStyleBackColor = true;
-            this.BrushRadio.CheckedChanged += new System.EventHandler(this.Instruments_Click);
+            this.BrushRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // PencilRadio
             // 
@@ -253,7 +269,7 @@
             this.PencilRadio.Text = "!";
             this.PencilRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.PencilRadio.UseVisualStyleBackColor = true;
-            this.PencilRadio.CheckedChanged += new System.EventHandler(this.Instruments_Click);
+            this.PencilRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -290,11 +306,12 @@
             this.ThicknessText.Location = new System.Drawing.Point(71, 3);
             this.ThicknessText.MaxLength = 3;
             this.ThicknessText.Name = "ThicknessText";
-            this.ThicknessText.Size = new System.Drawing.Size(40, 23);
+            this.ThicknessText.Size = new System.Drawing.Size(31, 23);
             this.ThicknessText.TabIndex = 9;
             this.ThicknessText.TabStop = false;
             this.ThicknessText.Text = "1";
             this.ThicknessText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ThicknessText.TextChanged += new System.EventHandler(this.ThicknessText_TextChanged);
             this.ThicknessText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ThicknessText_KeyPress);
             // 
             // FillCheck
@@ -311,6 +328,17 @@
             this.FillCheck.TabStop = false;
             this.FillCheck.Text = "&Заливка";
             this.FillCheck.UseVisualStyleBackColor = true;
+            // 
+            // BorderColorButton
+            // 
+            this.BorderColorButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.BorderColorButton.BackColor = System.Drawing.Color.Black;
+            this.BorderColorButton.Location = new System.Drawing.Point(3, 320);
+            this.BorderColorButton.Name = "BorderColorButton";
+            this.BorderColorButton.Size = new System.Drawing.Size(48, 48);
+            this.BorderColorButton.TabIndex = 13;
+            this.BorderColorButton.UseVisualStyleBackColor = false;
+            this.BorderColorButton.Click += new System.EventHandler(this.BorderColorButton_Click);
             // 
             // MainFormMenuStrip
             // 
@@ -641,6 +669,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TextBox ThicknessText;
         private System.Windows.Forms.CheckBox FillCheck;
+        private System.Windows.Forms.Button FillColorButton;
+        private System.Windows.Forms.Button BorderColorButton;
+        private System.Windows.Forms.ColorDialog ColorDialog;
     }
 }
 

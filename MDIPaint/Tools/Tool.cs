@@ -11,21 +11,32 @@ namespace MDIPaint.Tools
     {
         public Tool(Color color)
         {
-            Color = color;
+            BorderColor = color;
+            Thickness = 1;
         }
 
+        public abstract void NextStroke(
+            Graphics graphics,
+            Point previous,
+            Point next
+        );
+
         public abstract void Draw(
-            Graphics graphics, 
-            Point start, 
+            Graphics graphics,
+            Point start,
             Point end
         );
 
-        public virtual Color Color
+        public Color BorderColor
         {
             get => pen.Color;
-            set => pen = new Pen(value);     
+            set => pen.Color = value;     
         }
 
-        protected Pen pen;
+        public abstract bool NeedsPreview { get; }
+
+        public int Thickness { get; set; }
+
+        protected Pen pen = new Pen(Color.Black);
     }
 }

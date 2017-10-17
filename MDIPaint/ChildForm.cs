@@ -24,11 +24,13 @@ namespace MDIPaint
 
         private MainForm mParent;
         private bool mNeedBackup = false;
-        private bool mDraw = true;
+        private bool mDrawing = false;
+        private bool mResizing = false;
         private bool mResized = false;
         private LinkedList<Bitmap> mBuffers = new LinkedList<Bitmap>();
         private LinkedListNode<Bitmap> mCurrentBuffer;
         private Graphics mBackBuffer;
+        private Graphics mPreview;
         private Point mPrevious;
         private string mFilename = String.Empty;
 
@@ -39,7 +41,7 @@ namespace MDIPaint
         public ChildForm()
         {
             InitializeComponent();
-            mBuffers.AddLast(new Bitmap(Width, Height));
+            mBuffers.AddLast(new Bitmap(Width - 64, Height - 64));
             mCurrentBuffer = mBuffers.Last;
             UpdateGraphics();
             MouseWheel += ChildForm_MouseWheel;
@@ -131,8 +133,8 @@ namespace MDIPaint
             mCurrentBuffer = mBuffers.Last;
             UpdateGraphics();
         }
-        
-        private void StrikeTo(Point next)
+
+        private void StrikeTo(Point next, bool isFinal = false)
         {
             if (mNeedBackup)
             {
@@ -142,11 +144,26 @@ namespace MDIPaint
 
             IsChanged = true;
 
-            mParent.Tool.Draw(
-                mBackBuffer, 
-                Unscale(mPrevious),
-                Unscale(next)
-            );
+            var tool = mParent.Tool;
+
+            if (isFinal)
+            {
+                tool.Draw(
+                    mBackBuffer,
+                    Unscale(mStartPt),
+                    Unscale(mFinishPt)
+                );
+            }
+            else if (!tool.NeedsPreview)
+            {
+                tool.NextStroke(
+                    mBackBuffer,
+                    Unscale(mPrevious),
+                    Unscale(next)
+                );
+            }
+            
+            Redraw();
 
             mPrevious = next;
         }
@@ -191,10 +208,13 @@ namespace MDIPaint
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
         {
+            Canvas.Focus();
+
             if (e.Button == MouseButtons.Left)
             {
                 mNeedBackup = true;
                 mStartPt = e.Location;
+                mDrawing = true;
             }
 
             mPrevious = e.Location;
@@ -204,30 +224,7 @@ namespace MDIPaint
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (mDraw)
-                {
-                    StrikeTo(e.Location);
-                    Redraw();
-                }
-                else
-                {
-                    mResized = true;
-                    Canvas.Width = Math.Max(7, Canvas.Width + e.X - mPrevious.X);
-                    Canvas.Height = Math.Max(7, Canvas.Height + e.Y - mPrevious.Y);
-                }
-            }
-            else if (e.Button == MouseButtons.None)
-            {
-                if (Canvas.Width - e.X < 7 && Canvas.Height - e.Y < 7)
-                {
-                    mDraw = false;
-                    Canvas.Cursor = Cursors.SizeNWSE;
-                }
-                else
-                {
-                    mDraw = true;
-                    Canvas.Cursor = Cursors.Default;
-                }
+                StrikeTo(e.Location);
             }
 
             mPrevious = e.Location;
@@ -235,14 +232,12 @@ namespace MDIPaint
 
         private void Canvas_MouseUp(object sender, MouseEventArgs e)
         {
-            if (mResized)
-            {
-                ChangeBitmapSize();
-                mResized = false;
-            }
-
             mNeedBackup = false;
+            mDrawing = false;
             mPrevious = e.Location;
+            mFinishPt = e.Location;
+
+            StrikeTo(mFinishPt, true);
         }
 
         private void Canvas_Paint(object sender, PaintEventArgs e)
@@ -254,10 +249,17 @@ namespace MDIPaint
             e.Graphics.SmoothingMode = SmoothingMode.None;
             
             e.Graphics.DrawImage(bmp, 0, 0, Scale(bmp.Width), Scale(bmp.Height));
-        }
 
-        private void Canvas_Resize(object sender, EventArgs e)
-        {
+            var tool = mParent.Tool;
+
+            if (mDrawing && tool.NeedsPreview)
+            {
+                tool.Draw(
+                    e.Graphics,
+                    Unscale(mStartPt),
+                    Unscale(mPrevious)
+                );
+            }
         }
 
         private void ChildForm_MouseWheel(object sender, MouseEventArgs e)
@@ -311,6 +313,50 @@ namespace MDIPaint
         private void ChildForm_Load(object sender, EventArgs e)
         {
             mParent = (MainForm)ParentForm;
+            mPreview = Canvas.CreateGraphics();
+        }
+
+        private void ChildForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                mPrevious = e.Location;
+        }
+
+        private void ChildForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (mResizing)
+                {
+                    mResized = true;
+                    Canvas.Width = Math.Max(1, Canvas.Width + e.X - mPrevious.X);
+                    Canvas.Height = Math.Max(1, Canvas.Height + e.Y - mPrevious.Y);
+                    mPrevious = e.Location;
+                }
+            }
+            else if (e.Button == MouseButtons.None)
+            {
+                if (e.X > Canvas.Width && e.X < Canvas.Width + 7 &&
+                    e.Y > Canvas.Height && e.Y < Canvas.Height + 7)
+                {
+                    mResizing = true;
+                    Cursor = Cursors.SizeNWSE;
+                }
+                else
+                {
+                    mResizing = false;
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void ChildForm_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (mResized)
+            {
+                ChangeBitmapSize();
+                mResized = false;
+            }
         }
     }
 }

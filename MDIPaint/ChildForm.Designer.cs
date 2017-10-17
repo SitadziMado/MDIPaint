@@ -35,6 +35,7 @@
             // 
             // Canvas
             // 
+            this.Canvas.BackColor = System.Drawing.Color.White;
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Canvas.Location = new System.Drawing.Point(0, 0);
             this.Canvas.Name = "Canvas";
@@ -46,7 +47,6 @@
             this.Canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseDown);
             this.Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseMove);
             this.Canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseUp);
-            this.Canvas.Resize += new System.EventHandler(this.Canvas_Resize);
             // 
             // SaveImageDialog
             // 
@@ -60,12 +60,15 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(330, 318);
+            this.ClientSize = new System.Drawing.Size(624, 442);
             this.Controls.Add(this.Canvas);
             this.Name = "ChildForm";
             this.Text = "ChildForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChildForm_FormClosing);
             this.Load += new System.EventHandler(this.ChildForm_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChildForm_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChildForm_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChildForm_MouseUp);
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).EndInit();
             this.ResumeLayout(false);
 

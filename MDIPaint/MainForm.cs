@@ -25,10 +25,10 @@ namespace MDIPaint
         {
             { "Pencil", new Pencil(Color.Black) },
             { "Brush", new Tools.BrushTool(Color.Black) },
-            // { "Line", new Line(Color.Black) },
-            // { "Star", new Star(Color.Black) },
-            // { "Ellipse", new Ellipse(Color.Black) },
-            // { "Eraser", new Eraser(Color.Black) },
+            { "Line", new Line(Color.Black) },
+            { "Star", new Star(Color.Black) },
+            { "Ellipse", new Ellipse(Color.Black) },
+            { "Eraser", new Eraser(Color.Black) },
             // { "ScaleIn", new ScaleIn(Color.Black) },
             // { "ScaleOut", new ScaleOut(Color.Black) },
         };
@@ -37,6 +37,15 @@ namespace MDIPaint
         {
             InitializeComponent();
             mPreviouslySelected = PencilRadio;
+        }
+
+        private void UpdateTool()
+        {
+            Tool.Thickness = int.Parse(ThicknessText.Text);
+            Tool.BorderColor = BorderColorButton.BackColor;
+
+            if (Tool is FilledTool)
+                (Tool as FilledTool).FillColor = FillColorButton.BackColor;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -64,9 +73,10 @@ namespace MDIPaint
             mChildren.Clear();
         }
 
-        private void Instruments_Click(object sender, EventArgs e)
+        private void Tools_Click(object sender, EventArgs e)
         {
             Tool = mToolbox[(string)((Control)sender).Tag];
+            UpdateTool();
         }
 
         private void MenuItemUndo_Click(object sender, EventArgs e)
@@ -153,6 +163,33 @@ namespace MDIPaint
         {
             if (e.KeyChar < '0' || e.KeyChar > '9')
                 e.Handled = true;
+        }
+
+        private void ThicknessText_TextChanged(object sender, EventArgs e)
+        {
+            UpdateTool();
+        }
+
+        private void BorderColorButton_Click(object sender, EventArgs e)
+        {
+            ColorDialog.Color = BorderColorButton.BackColor;
+
+            if (ColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                BorderColorButton.BackColor = ColorDialog.Color;
+                UpdateTool();
+            }
+        }
+
+        private void FillColorButton_Click(object sender, EventArgs e)
+        {
+            ColorDialog.Color = FillColorButton.BackColor;
+
+            if (ColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                FillColorButton.BackColor = ColorDialog.Color;
+                UpdateTool();
+            }
         }
     }
 }
