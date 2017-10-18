@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,13 +16,10 @@ namespace MDIPaint.Tools
 
         public override void Draw(Graphics graphics, Point start, Point end)
         {
-            NextStroke(graphics, start, end);
-        }
-
-        public override void NextStroke(Graphics graphics, Point start, Point end)
-        {
-            pen.Color = brush.Color;
-            base.NextStroke(graphics, start, end);
+            pen.Color = brush.Color = Color.Transparent;
+            graphics.CompositingMode = CompositingMode.SourceCopy;
+            base.Draw(graphics, start, end);
+            graphics.CompositingMode = CompositingMode.SourceOver;
         }
     }
 }

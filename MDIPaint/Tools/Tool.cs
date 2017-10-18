@@ -15,12 +15,6 @@ namespace MDIPaint.Tools
             Thickness = 1;
         }
 
-        public abstract void NextStroke(
-            Graphics graphics,
-            Point previous,
-            Point next
-        );
-
         public abstract void Draw(
             Graphics graphics,
             Point start,

@@ -35,7 +35,7 @@
             // 
             // Canvas
             // 
-            this.Canvas.BackColor = System.Drawing.Color.White;
+            this.Canvas.BackColor = System.Drawing.Color.Transparent;
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Canvas.Location = new System.Drawing.Point(0, 0);
             this.Canvas.Name = "Canvas";
@@ -51,7 +51,9 @@
             // SaveImageDialog
             // 
             this.SaveImageDialog.DefaultExt = "bmp";
-            this.SaveImageDialog.Filter = "Bitmap|*.bmp";
+            this.SaveImageDialog.Filter = "Bitmap|*.bmp|Joint Picture Expert Group Format|*.jpg,*.jpeg,*.jfif|Graphcics Inte" +
+    "rchange Format|*.gif|Tagged Image File Format|*.tif,*.tiff|Portable Network Grap" +
+    "hics|*.png|All Files|*.*";
             this.SaveImageDialog.Title = "Сохранить как...";
             this.SaveImageDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.SaveImageDialog_FileOk);
             // 

@@ -41,11 +41,19 @@ namespace MDIPaint
 
         private void UpdateTool()
         {
+            var borderColor = Color.FromArgb(
+                AlphaBar.Value, BorderColorButton.BackColor
+            );
+
+            var fillColor = Color.FromArgb(
+                AlphaBar.Value, FillColorButton.BackColor
+            );
+
             Tool.Thickness = int.Parse(ThicknessText.Text);
-            Tool.BorderColor = BorderColorButton.BackColor;
+            Tool.BorderColor = borderColor;
 
             if (Tool is FilledTool)
-                (Tool as FilledTool).FillColor = FillColorButton.BackColor;
+                (Tool as FilledTool).FillColor = fillColor;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -53,12 +61,28 @@ namespace MDIPaint
             Tool = mToolbox["Pencil"];
         }
 
-        private void MenuNew_Click(object sender, EventArgs e)
+        private void MenuItemNew_Click(object sender, EventArgs e)
         {
             var child = new ChildForm
             {
                 MdiParent = this,
                 Text = string.Format("Рисунок {0}", ++mChildrenSoFar),
+            };
+
+            child.Show();
+            mChildren.AddLast(child);
+        }
+
+        private void MenuItemOpen_Click(object sender, EventArgs e)
+        {
+            var result = OpenImageDialog.ShowDialog();
+        }
+
+        private void OpenImageDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            var child = new ChildForm(OpenImageDialog.FileName)
+            {
+                MdiParent = this,
             };
 
             child.Show();
@@ -190,6 +214,44 @@ namespace MDIPaint
                 FillColorButton.BackColor = ColorDialog.Color;
                 UpdateTool();
             }
+        }
+
+        private void AlphaBar_ValueChanged(object sender, EventArgs e)
+        {
+            AlphaLabel.Text = String.Format(
+                "Непрозрачность: {0}", 
+                AlphaBar.Value
+            );
+
+            UpdateTool();
+        }
+
+        private void XchgButton_Click(object sender, EventArgs e)
+        {
+            var color = BorderColorButton.BackColor;
+            BorderColorButton.BackColor = FillColorButton.BackColor;
+            FillColorButton.BackColor = color;
+            UpdateTool();
+        }
+
+        private void MenuItemCascade_Click(object sender, EventArgs e)
+        {
+            LayoutMdi(MdiLayout.Cascade);
+        }
+
+        private void MenuItemLeftToRight_Click(object sender, EventArgs e)
+        {
+            LayoutMdi(MdiLayout.TileHorizontal);
+        }
+
+        private void MenuItemTopToBottom_Click(object sender, EventArgs e)
+        {
+            LayoutMdi(MdiLayout.TileVertical);
+        }
+
+        private void MenuItemArrange_Click(object sender, EventArgs e)
+        {
+            LayoutMdi(MdiLayout.ArrangeIcons);
         }
     }
 }

@@ -15,10 +15,6 @@ namespace MDIPaint.Tools
 
         public override void Draw(Graphics graphics, Point start, Point end)
         {
-        }
-
-        public override void NextStroke(Graphics graphics, Point start, Point end)
-        {
             var halfThickness = Thickness / 2;
 
             start.X -= halfThickness;
@@ -27,7 +23,7 @@ namespace MDIPaint.Tools
             Rectangle rect = new Rectangle(start, new Size(Thickness, Thickness));
 
             graphics.FillEllipse(brush, rect);
-            graphics.DrawEllipse(pen, rect);
+            // graphics.DrawEllipse(pen, rect);
         }
 
         public override bool NeedsPreview => false;

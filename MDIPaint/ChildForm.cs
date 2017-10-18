@@ -14,7 +14,7 @@ namespace MDIPaint
 {
     public partial class ChildForm : Form
     {
-        public Bitmap Image => mCurrentBuffer.Value;
+        // public Bitmap Image => mCurrentBuffer.Value;
         public bool CanUndo => mCurrentBuffer.Previous != null;
         public bool CanRedo => mCurrentBuffer.Next != null;
         public bool IsChanged { get; internal set; }
@@ -38,13 +38,32 @@ namespace MDIPaint
         private Point mFinishPt;
         private double mScaleFactor = 1.0;
 
-        public ChildForm()
+        private void Init()
         {
             InitializeComponent();
-            mBuffers.AddLast(new Bitmap(Width - 64, Height - 64));
+        }
+
+        private void PostInit()
+        {
             mCurrentBuffer = mBuffers.Last;
             UpdateGraphics();
             MouseWheel += ChildForm_MouseWheel;
+        }
+
+        public ChildForm()
+        {
+            Init();
+            mBuffers.AddLast(new Bitmap(Width - 64, Height - 64));
+            PostInit();
+        }
+
+        public ChildForm(string filename)
+        {
+            Init();
+            mFilename = filename;
+            UpdateFormText();
+            mBuffers.AddLast(new Bitmap(Image.FromFile(mFilename)));
+            PostInit();
         }
 
         public void Undo()
@@ -76,9 +95,9 @@ namespace MDIPaint
         {
             if (mFilename != "")
             {
-                Image.Save(mFilename);
+                mCurrentBuffer.Value.Save(mFilename);
                 IsChanged = false;
-                Text = mFilename;
+                UpdateFormText();
                 return DialogResult.OK;
             }
             else
@@ -146,7 +165,7 @@ namespace MDIPaint
 
             var tool = mParent.Tool;
 
-            if (isFinal)
+            if (isFinal && tool.NeedsPreview)
             {
                 tool.Draw(
                     mBackBuffer,
@@ -156,7 +175,7 @@ namespace MDIPaint
             }
             else if (!tool.NeedsPreview)
             {
-                tool.NextStroke(
+                tool.Draw(
                     mBackBuffer,
                     Unscale(mPrevious),
                     Unscale(next)
@@ -176,6 +195,7 @@ namespace MDIPaint
             mBackBuffer.CompositingQuality = CompositingQuality.AssumeLinear;
             mBackBuffer.InterpolationMode = InterpolationMode.Low;
             mBackBuffer.SmoothingMode = SmoothingMode.None;
+            mBackBuffer.CompositingMode = CompositingMode.SourceOver;
 
             FitContents();
         }
@@ -204,6 +224,11 @@ namespace MDIPaint
                 (int)(coordinates.X / mScaleFactor),
                 (int)(coordinates.Y / mScaleFactor)
             );
+        }
+
+        private void UpdateFormText()
+        {
+            Text = mFilename;
         }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
@@ -244,10 +269,11 @@ namespace MDIPaint
         {
             var bmp = mCurrentBuffer.Value;
 
-            e.Graphics.CompositingQuality = CompositingQuality.AssumeLinear;
-            e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            e.Graphics.SmoothingMode = SmoothingMode.None;
-            
+            e.Graphics.CompositingQuality = mBackBuffer.CompositingQuality;
+            e.Graphics.InterpolationMode = mBackBuffer.InterpolationMode;
+            e.Graphics.SmoothingMode = mBackBuffer.SmoothingMode;
+            e.Graphics.CompositingMode = mBackBuffer.CompositingMode;
+
             e.Graphics.DrawImage(bmp, 0, 0, Scale(bmp.Width), Scale(bmp.Height));
 
             var tool = mParent.Tool;

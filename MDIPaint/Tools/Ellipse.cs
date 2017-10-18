@@ -34,11 +34,6 @@ namespace MDIPaint.Tools
             graphics.DrawEllipse(pen, rect);
         }
 
-        public override void NextStroke(Graphics graphics, Point previous, Point next)
-        {
-            throw new NotImplementedException();
-        }
-
         public override bool NeedsPreview => true;
     }
 }

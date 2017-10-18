@@ -19,11 +19,6 @@ namespace MDIPaint.Tools
             graphics.DrawLine(pen, start, end);
         }
 
-        public override void NextStroke(Graphics graphics, Point previous, Point next)
-        {
-            Draw(graphics, previous, next);
-        }
-
         public override bool NeedsPreview => true;
     }
 }
