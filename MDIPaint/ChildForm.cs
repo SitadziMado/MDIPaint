@@ -9,11 +9,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Effects;
+using System.Threading;
 
 namespace MDIPaint
 {
     public partial class ChildForm : Form
     {
+        private delegate void EffectAction(Bitmap src, ref long progress);
+
         // public Bitmap Image => mCurrentBuffer.Value;
         public bool CanUndo => mCurrentBuffer.Previous != null;
         public bool CanRedo => mCurrentBuffer.Next != null;
@@ -37,7 +41,7 @@ namespace MDIPaint
         private Point mStartPt;
         private Point mFinishPt;
         private double mScaleFactor = 1.0;
-
+        
         private void Init()
         {
             InitializeComponent();
@@ -114,6 +118,29 @@ namespace MDIPaint
                 mScaleFactor -= ScaleIncrease;
 
             FitContents();
+            Redraw();
+        }
+
+        public void Emboss() => ApplyProgressEffect(Effect.Emboss, "контур");
+
+        private void ApplyProgressEffect(EffectAction action, string name)
+        {
+            AddRestorationPoint();
+            long progress = 0L;
+            var task = Task.Factory.StartNew(
+                () => action(mCurrentBuffer.Value, ref progress)
+            );
+
+            var progressForm = new ProgressDialog(name);
+
+            progressForm.Show();
+
+            while (task.Status == TaskStatus.Running)
+            {
+                progressForm.Progress = progress;
+                Thread.Sleep(100);
+            }
+
             Redraw();
         }
 
@@ -383,6 +410,8 @@ namespace MDIPaint
                 ChangeBitmapSize();
                 mResized = false;
             }
+
+            Emboss();
         }
     }
 }
