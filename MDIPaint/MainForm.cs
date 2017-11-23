@@ -129,7 +129,6 @@ namespace MDIPaint
                 MenuItemUndo.Enabled = false;
                 MenuItemRedo.Enabled = false;
             }
-
         }
 
         private void MenuItemExit_Click(object sender, EventArgs e)
@@ -254,5 +253,50 @@ namespace MDIPaint
         {
             LayoutMdi(MdiLayout.ArrangeIcons);
         }
+
+        private void MenuImage_DropDownOpening(object sender, EventArgs e)
+        {
+            var active = ActiveMdiChild;
+
+            if (active != null)
+            {
+                var child = (ChildForm)active;
+                MenuItemEmboss.Enabled = true;
+                MenuItemSharpen.Enabled = true;
+                MenuItemSmooth.Enabled = true;
+                MenuItemDiffuse.Enabled = true;
+                MenuItemRotateCCW.Enabled = true;
+                MenuItemRotateCW.Enabled = true;
+                MenuItemFlipHorz.Enabled = true;
+                MenuItemFlipVert.Enabled = true;
+            }
+            else
+            {
+                MenuItemEmboss.Enabled = false;
+                MenuItemSharpen.Enabled = false;
+                MenuItemSmooth.Enabled = false;
+                MenuItemDiffuse.Enabled = false;
+                MenuItemRotateCCW.Enabled = false;
+                MenuItemRotateCW.Enabled = false;
+                MenuItemFlipHorz.Enabled = false;
+                MenuItemFlipVert.Enabled = false;
+            }
+        }
+
+        private void MenuItemEmboss_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).Emboss();
+
+        private void MenuItemSharpen_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).Sharpen();
+
+        private void MenuItemSmooth_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).Smooth();
+
+        private void MenuItemDiffuse_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).Diffuse();
+
+        private void MenuItemRotateCCW_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).RotateCCW();
+
+        private void MenuItemRotateCW_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).RotateCW();
+
+        private void MenuItemFlipHorz_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).FlipHorizontal();
+
+        private void MenuItemFlipVert_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).FlipVertical();
     }
 }

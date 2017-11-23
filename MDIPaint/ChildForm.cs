@@ -16,7 +16,8 @@ namespace MDIPaint
 {
     public partial class ChildForm : Form
     {
-        private delegate void EffectAction(Bitmap src, ref long progress);
+        private delegate void ProgressEffectAction(Bitmap src, ref long progress);
+        private delegate void EffectAction(Bitmap src);
 
         // public Bitmap Image => mCurrentBuffer.Value;
         public bool CanUndo => mCurrentBuffer.Previous != null;
@@ -122,23 +123,53 @@ namespace MDIPaint
         }
 
         public void Emboss() => ApplyProgressEffect(Effect.Emboss, "контур");
+        public void Sharpen() => ApplyProgressEffect(Effect.Sharpen, "резкость");
+        public void Smooth() => ApplyProgressEffect(Effect.Smooth, "сглаживание");
+        public void Diffuse() => ApplyProgressEffect(Effect.Diffuse, "рассеивание");
+        public void RotateCCW() => ApplyEffect(Effect.RotateCCW, "повернуть против часовой стрелки");
+        public void RotateCW() => ApplyEffect(Effect.RotateCW, "повернуть по часовой стрелке");
+        public void FlipHorizontal() => ApplyEffect(Effect.FlipHorizontal, "отразить по горизонали");
+        public void FlipVertical() => ApplyEffect(Effect.FlipVertical, "отразить по вертикали");
 
-        private void ApplyProgressEffect(EffectAction action, string name)
+        private void ApplyProgressEffect(ProgressEffectAction action, string name)
         {
             AddRestorationPoint();
             long progress = 0L;
+
+            var buffer = mCurrentBuffer.Value;
+
             var task = Task.Factory.StartNew(
-                () => action(mCurrentBuffer.Value, ref progress)
+                () => {
+                    action(buffer, ref progress);
+                }
             );
 
             var progressForm = new ProgressDialog(name);
 
             progressForm.Show();
 
+            Canvas.Enabled = false;
+
             while (task.Status == TaskStatus.Running)
             {
                 progressForm.Progress = progress;
                 Thread.Sleep(100);
+            }
+
+            progressForm.Close();
+
+            Canvas.Enabled = true;
+
+            Redraw();
+        }
+
+        private void ApplyEffect(EffectAction action, string name)
+        {
+            AddRestorationPoint();
+
+            lock (mCurrentBuffer.Value)
+            {
+                action(mCurrentBuffer.Value);
             }
 
             Redraw();
@@ -208,7 +239,7 @@ namespace MDIPaint
                     Unscale(next)
                 );
             }
-            
+
             Redraw();
 
             mPrevious = next;
@@ -302,6 +333,7 @@ namespace MDIPaint
             e.Graphics.CompositingMode = mBackBuffer.CompositingMode;
 
             e.Graphics.DrawImage(bmp, 0, 0, Scale(bmp.Width), Scale(bmp.Height));
+
 
             var tool = mParent.Tool;
 
@@ -410,8 +442,6 @@ namespace MDIPaint
                 ChangeBitmapSize();
                 mResized = false;
             }
-
-            Emboss();
         }
     }
 }

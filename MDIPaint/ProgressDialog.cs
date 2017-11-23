@@ -14,8 +14,11 @@ namespace MDIPaint
     {
         public string EffectName
         {
-            set => ProgressLabel.Text = 
-                $"Выполняется применение эффекта {value}...";
+            set
+            {
+                ProgressLabel.Text =
+              $"Выполняется применение эффекта {value}...";
+            }
         }
 
         public long Progress

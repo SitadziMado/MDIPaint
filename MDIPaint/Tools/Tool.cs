@@ -23,8 +23,8 @@ namespace MDIPaint.Tools
 
         public Color BorderColor
         {
-            get => pen.Color;
-            set => pen.Color = value;     
+            get { return pen.Color; }
+            set { pen.Color = value; }   
         }
 
         public abstract bool NeedsPreview { get; }

@@ -72,7 +72,15 @@
             this.MenuItemPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuItemSelectAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.форматToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemEmboss = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemSharpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemSmooth = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemDiffuse = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemRotateCCW = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemRotateCW = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemFlipHorz = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemFlipVert = new System.Windows.Forms.ToolStripMenuItem();
             this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -414,7 +422,7 @@
             this.MainFormMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuFile,
             this.MenuEdit,
-            this.форматToolStripMenuItem,
+            this.MenuImage,
             this.видToolStripMenuItem,
             this.справкаToolStripMenuItem,
             this.MenuWindows,
@@ -547,62 +555,134 @@
             // MenuItemUndo
             // 
             this.MenuItemUndo.Name = "MenuItemUndo";
-            this.MenuItemUndo.Size = new System.Drawing.Size(148, 22);
+            this.MenuItemUndo.Size = new System.Drawing.Size(152, 22);
             this.MenuItemUndo.Text = "&Отменить";
             this.MenuItemUndo.Click += new System.EventHandler(this.MenuItemUndo_Click);
             // 
             // MenuItemRedo
             // 
             this.MenuItemRedo.Name = "MenuItemRedo";
-            this.MenuItemRedo.Size = new System.Drawing.Size(148, 22);
+            this.MenuItemRedo.Size = new System.Drawing.Size(152, 22);
             this.MenuItemRedo.Text = "В&ернуть";
             this.MenuItemRedo.Click += new System.EventHandler(this.MenuItemRedo_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(145, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // MenuItemCut
             // 
             this.MenuItemCut.Name = "MenuItemCut";
-            this.MenuItemCut.Size = new System.Drawing.Size(148, 22);
+            this.MenuItemCut.Size = new System.Drawing.Size(152, 22);
             this.MenuItemCut.Text = "&Вырезать...";
+            this.MenuItemCut.Visible = false;
             // 
             // MenuItemCopy
             // 
             this.MenuItemCopy.Name = "MenuItemCopy";
-            this.MenuItemCopy.Size = new System.Drawing.Size(148, 22);
+            this.MenuItemCopy.Size = new System.Drawing.Size(152, 22);
             this.MenuItemCopy.Text = "&Копировать";
+            this.MenuItemCopy.Visible = false;
             // 
             // MenuItemPaste
             // 
             this.MenuItemPaste.Name = "MenuItemPaste";
-            this.MenuItemPaste.Size = new System.Drawing.Size(148, 22);
+            this.MenuItemPaste.Size = new System.Drawing.Size(152, 22);
             this.MenuItemPaste.Text = "В&ставить";
+            this.MenuItemPaste.Visible = false;
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(145, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Visible = false;
             // 
             // MenuItemSelectAll
             // 
             this.MenuItemSelectAll.Name = "MenuItemSelectAll";
-            this.MenuItemSelectAll.Size = new System.Drawing.Size(148, 22);
+            this.MenuItemSelectAll.Size = new System.Drawing.Size(152, 22);
             this.MenuItemSelectAll.Text = "В&ыделить все";
+            this.MenuItemSelectAll.Visible = false;
             // 
-            // форматToolStripMenuItem
+            // MenuImage
             // 
-            this.форматToolStripMenuItem.Name = "форматToolStripMenuItem";
-            this.форматToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
-            this.форматToolStripMenuItem.Text = "&Формат";
+            this.MenuImage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemEmboss,
+            this.MenuItemSharpen,
+            this.MenuItemSmooth,
+            this.MenuItemDiffuse,
+            this.MenuItemRotateCCW,
+            this.MenuItemRotateCW,
+            this.MenuItemFlipHorz,
+            this.MenuItemFlipVert});
+            this.MenuImage.Name = "MenuImage";
+            this.MenuImage.Size = new System.Drawing.Size(65, 20);
+            this.MenuImage.Text = "&Рисунок";
+            this.MenuImage.DropDownOpening += new System.EventHandler(this.MenuImage_DropDownOpening);
+            // 
+            // MenuItemEmboss
+            // 
+            this.MenuItemEmboss.Name = "MenuItemEmboss";
+            this.MenuItemEmboss.Size = new System.Drawing.Size(271, 22);
+            this.MenuItemEmboss.Text = "&Контур";
+            this.MenuItemEmboss.Click += new System.EventHandler(this.MenuItemEmboss_Click);
+            // 
+            // MenuItemSharpen
+            // 
+            this.MenuItemSharpen.Name = "MenuItemSharpen";
+            this.MenuItemSharpen.Size = new System.Drawing.Size(271, 22);
+            this.MenuItemSharpen.Text = "Р&езкость";
+            this.MenuItemSharpen.Click += new System.EventHandler(this.MenuItemSharpen_Click);
+            // 
+            // MenuItemSmooth
+            // 
+            this.MenuItemSmooth.Name = "MenuItemSmooth";
+            this.MenuItemSmooth.Size = new System.Drawing.Size(271, 22);
+            this.MenuItemSmooth.Text = "&Сглаживание";
+            this.MenuItemSmooth.Click += new System.EventHandler(this.MenuItemSmooth_Click);
+            // 
+            // MenuItemDiffuse
+            // 
+            this.MenuItemDiffuse.Name = "MenuItemDiffuse";
+            this.MenuItemDiffuse.Size = new System.Drawing.Size(271, 22);
+            this.MenuItemDiffuse.Text = "Р&ассеивание";
+            this.MenuItemDiffuse.Click += new System.EventHandler(this.MenuItemDiffuse_Click);
+            // 
+            // MenuItemRotateCCW
+            // 
+            this.MenuItemRotateCCW.Name = "MenuItemRotateCCW";
+            this.MenuItemRotateCCW.Size = new System.Drawing.Size(271, 22);
+            this.MenuItemRotateCCW.Text = "Повер&нуть против часовой стрелки";
+            this.MenuItemRotateCCW.Click += new System.EventHandler(this.MenuItemRotateCCW_Click);
+            // 
+            // MenuItemRotateCW
+            // 
+            this.MenuItemRotateCW.Name = "MenuItemRotateCW";
+            this.MenuItemRotateCW.Size = new System.Drawing.Size(271, 22);
+            this.MenuItemRotateCW.Text = "Поверн&уть по часовой стрелке";
+            this.MenuItemRotateCW.Click += new System.EventHandler(this.MenuItemRotateCW_Click);
+            // 
+            // MenuItemFlipHorz
+            // 
+            this.MenuItemFlipHorz.Name = "MenuItemFlipHorz";
+            this.MenuItemFlipHorz.Size = new System.Drawing.Size(271, 22);
+            this.MenuItemFlipHorz.Text = "О&тразить по горизонтали";
+            this.MenuItemFlipHorz.Click += new System.EventHandler(this.MenuItemFlipHorz_Click);
+            // 
+            // MenuItemFlipVert
+            // 
+            this.MenuItemFlipVert.Name = "MenuItemFlipVert";
+            this.MenuItemFlipVert.Size = new System.Drawing.Size(271, 22);
+            this.MenuItemFlipVert.Text = "Отра&зить по вертикали";
+            this.MenuItemFlipVert.Click += new System.EventHandler(this.MenuItemFlipVert_Click);
             // 
             // видToolStripMenuItem
             // 
             this.видToolStripMenuItem.Name = "видToolStripMenuItem";
             this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.видToolStripMenuItem.Text = "&Вид";
+            this.видToolStripMenuItem.Visible = false;
             // 
             // справкаToolStripMenuItem
             // 
@@ -711,7 +791,7 @@
         private System.Windows.Forms.MenuStrip MainFormMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem MenuFile;
         private System.Windows.Forms.ToolStripMenuItem MenuEdit;
-        private System.Windows.Forms.ToolStripMenuItem форматToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuImage;
         private System.Windows.Forms.ToolStripMenuItem видToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MenuItemNew;
@@ -762,6 +842,14 @@
         private System.Windows.Forms.Label AlphaLabel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Button XchgButton;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemEmboss;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemSharpen;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemSmooth;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemDiffuse;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemRotateCCW;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemRotateCW;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemFlipHorz;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemFlipVert;
     }
 }
 

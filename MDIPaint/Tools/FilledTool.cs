@@ -16,8 +16,8 @@ namespace MDIPaint.Tools
 
         public Color FillColor
         {
-            get => brush.Color;
-            set => brush.Color = value;
+            get { return brush.Color; }
+            set { brush.Color = value; }
         }
 
         public bool Fill { get; set; }
