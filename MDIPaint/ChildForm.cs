@@ -16,7 +16,6 @@ namespace MDIPaint
 {
     public partial class ChildForm : Form
     {
-        private delegate void ProgressEffectAction(Bitmap src, ref long progress);
         private delegate void EffectAction(Bitmap src);
 
         // public Bitmap Image => mCurrentBuffer.Value;
@@ -131,34 +130,17 @@ namespace MDIPaint
         public void FlipHorizontal() => ApplyEffect(Effect.FlipHorizontal, "отразить по горизонали");
         public void FlipVertical() => ApplyEffect(Effect.FlipVertical, "отразить по вертикали");
 
-        private void ApplyProgressEffect(ProgressEffectAction action, string name)
+        private void ApplyProgressEffect(ProgressDialog.ProgressEffectAction action, string name)
         {
             AddRestorationPoint();
-            long progress = 0L;
-
-            var buffer = mCurrentBuffer.Value;
-
-            var task = Task.Factory.StartNew(
-                () => {
-                    action(buffer, ref progress);
-                }
-            );
-
-            var progressForm = new ProgressDialog(name);
-
-            progressForm.Show();
+            AddRestorationPoint();
 
             Canvas.Enabled = false;
-
-            while (task.Status == TaskStatus.Running)
-            {
-                progressForm.Progress = progress;
-                Thread.Sleep(100);
-            }
-
-            progressForm.Close();
-
+            var progressForm = new ProgressDialog(mCurrentBuffer.Previous.Value, action, name);
+            progressForm.ShowDialog(mParent);
             Canvas.Enabled = true;
+
+            Undo();
 
             Redraw();
         }

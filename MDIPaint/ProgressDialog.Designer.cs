@@ -32,6 +32,7 @@
             this.ProgressLabel = new System.Windows.Forms.Label();
             this.CancelButton = new System.Windows.Forms.Button();
             this.EffectProgressBar = new System.Windows.Forms.ProgressBar();
+            this.DoEffect = new System.ComponentModel.BackgroundWorker();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -85,6 +86,13 @@
             this.EffectProgressBar.Size = new System.Drawing.Size(618, 23);
             this.EffectProgressBar.TabIndex = 0;
             // 
+            // DoEffect
+            // 
+            this.DoEffect.WorkerReportsProgress = true;
+            this.DoEffect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DoEffect_DoWork);
+            this.DoEffect.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.DoEffect_ProgressChanged);
+            this.DoEffect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.DoEffect_RunWorkerCompleted);
+            // 
             // ProgressDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -108,5 +116,6 @@
         private System.Windows.Forms.ProgressBar EffectProgressBar;
         private System.Windows.Forms.Label ProgressLabel;
         private System.Windows.Forms.Button CancelButton;
+        private System.ComponentModel.BackgroundWorker DoEffect;
     }
 }
