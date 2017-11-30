@@ -50,9 +50,8 @@
             // 
             // SaveImageDialog
             // 
-            this.SaveImageDialog.DefaultExt = "bmp";
-            this.SaveImageDialog.Filter = "Bitmap|*.bmp|Joint Picture Expert Group Format|*.jpg,*.jpeg,*.jfif|Graphcics Inte" +
-    "rchange Format|*.gif|Tagged Image File Format|*.tif,*.tiff|Portable Network Grap" +
+            this.SaveImageDialog.Filter = "Bitmap|*.bmp|Joint Picture Expert Group Format|*.jpg;*.jpeg;*.jfif|Graphcics Inte" +
+    "rchange Format|*.gif|Tagged Image File Format|*.tif;*.tiff|Portable Network Grap" +
     "hics|*.png|All Files|*.*";
             this.SaveImageDialog.Title = "Сохранить как...";
             this.SaveImageDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.SaveImageDialog_FileOk);

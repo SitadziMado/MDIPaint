@@ -37,6 +37,7 @@ namespace MDIPaint
         private Graphics mPreview;
         private Point mPrevious;
         private string mFilename = String.Empty;
+        private string mDefaultName;
 
         private Point mStartPt;
         private Point mFinishPt;
@@ -66,7 +67,26 @@ namespace MDIPaint
             Init();
             mFilename = filename;
             UpdateFormText();
-            mBuffers.AddLast(new Bitmap(Image.FromFile(mFilename)));
+
+            Bitmap bmp = null;
+
+            try
+            {
+                bmp = new Bitmap(Image.FromFile(mFilename));
+            }
+            catch (OutOfMemoryException)
+            {
+                MessageBox.Show(
+                    "Файл слишком большой.",
+                    "Ошибка",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error
+                );
+
+                Close();
+            }
+
+            mBuffers.AddLast(bmp);
             PostInit();
         }
 
@@ -117,6 +137,7 @@ namespace MDIPaint
             else
                 mScaleFactor -= ScaleIncrease;
 
+            UpdateFormText();
             FitContents();
             Redraw();
         }
@@ -233,7 +254,7 @@ namespace MDIPaint
             mBackBuffer = Graphics.FromImage(mCurrentBuffer.Value);
 
             mBackBuffer.CompositingQuality = CompositingQuality.AssumeLinear;
-            mBackBuffer.InterpolationMode = InterpolationMode.Low;
+            mBackBuffer.InterpolationMode = InterpolationMode.NearestNeighbor;
             mBackBuffer.SmoothingMode = SmoothingMode.None;
             mBackBuffer.CompositingMode = CompositingMode.SourceOver;
 
@@ -268,7 +289,14 @@ namespace MDIPaint
 
         private void UpdateFormText()
         {
-            Text = mFilename;
+            var text = (mFilename == String.Empty) 
+                ? (mDefaultName)
+                : (mFilename);
+
+            if (mScaleFactor == 1.0)
+                Text = text;
+            else
+                Text = $"{text}, увеличение {(int)(mScaleFactor * 100)}%";
         }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
@@ -316,15 +344,14 @@ namespace MDIPaint
 
             e.Graphics.DrawImage(bmp, 0, 0, Scale(bmp.Width), Scale(bmp.Height));
 
-
             var tool = mParent.Tool;
 
             if (mDrawing && tool.NeedsPreview)
             {
                 tool.Draw(
                     e.Graphics,
-                    Unscale(mStartPt),
-                    Unscale(mPrevious)
+                    (mStartPt),
+                    (mPrevious)
                 );
             }
         }
@@ -341,8 +368,12 @@ namespace MDIPaint
 
             if (IsChanged)
             {
+                var text = (mFilename == String.Empty)
+                    ? (mDefaultName)
+                    : (mFilename);
+
                 result = MessageBox.Show(
-                    "Изображение было изменено. Сохранить изменения?",
+                    $"Изображение \"{text}\" было изменено. Сохранить изменения?",
                     "Сохранить изменения?",
                     MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Information
@@ -381,6 +412,7 @@ namespace MDIPaint
         {
             mParent = (MainForm)ParentForm;
             mPreview = Canvas.CreateGraphics();
+            mDefaultName = Text;
         }
 
         private void ChildForm_MouseDown(object sender, MouseEventArgs e)

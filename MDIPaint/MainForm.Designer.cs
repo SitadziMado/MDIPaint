@@ -32,14 +32,13 @@
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
             System.Windows.Forms.Label label1;
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.ScaleOutRadio = new System.Windows.Forms.RadioButton();
-            this.ScaleInRadio = new System.Windows.Forms.RadioButton();
             this.EraserRadio = new System.Windows.Forms.RadioButton();
             this.EllipseRadio = new System.Windows.Forms.RadioButton();
             this.StarRadio = new System.Windows.Forms.RadioButton();
             this.LineRadio = new System.Windows.Forms.RadioButton();
             this.BrushRadio = new System.Windows.Forms.RadioButton();
             this.PencilRadio = new System.Windows.Forms.RadioButton();
+            this.ThicknessBar = new System.Windows.Forms.TrackBar();
             this.ThicknessText = new System.Windows.Forms.TextBox();
             this.FillCheck = new System.Windows.Forms.CheckBox();
             this.AlphaBar = new System.Windows.Forms.TrackBar();
@@ -93,12 +92,15 @@
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.OpenImageDialog = new System.Windows.Forms.OpenFileDialog();
+            this.ScaleInButton = new System.Windows.Forms.Button();
+            this.ScaleOuButton = new System.Windows.Forms.Button();
             panel1 = new System.Windows.Forms.Panel();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             label1 = new System.Windows.Forms.Label();
             panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ThicknessBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlphaBar)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
             this.MainFormMenuStrip.SuspendLayout();
@@ -118,8 +120,7 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.ScaleOutRadio, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.ScaleInRadio, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.ScaleOuButton, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.EraserRadio, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.EllipseRadio, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.StarRadio, 1, 1);
@@ -131,10 +132,11 @@
             this.tableLayoutPanel1.Controls.Add(this.AlphaBar, 0, 7);
             this.tableLayoutPanel1.Controls.Add(this.AlphaLabel, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.ScaleInButton, 0, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 11;
+            this.tableLayoutPanel1.RowCount = 9;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -143,43 +145,9 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(159, 538);
             this.tableLayoutPanel1.TabIndex = 2;
-            // 
-            // ScaleOutRadio
-            // 
-            this.ScaleOutRadio.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.ScaleOutRadio.Appearance = System.Windows.Forms.Appearance.Button;
-            this.ScaleOutRadio.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ScaleOutRadio.Font = new System.Drawing.Font("Courier New", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ScaleOutRadio.Location = new System.Drawing.Point(82, 165);
-            this.ScaleOutRadio.Name = "ScaleOutRadio";
-            this.ScaleOutRadio.Size = new System.Drawing.Size(48, 48);
-            this.ScaleOutRadio.TabIndex = 7;
-            this.ScaleOutRadio.Tag = "ScaleOut";
-            this.ScaleOutRadio.Text = "-";
-            this.ScaleOutRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ScaleOutRadio.UseVisualStyleBackColor = true;
-            this.ScaleOutRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
-            // 
-            // ScaleInRadio
-            // 
-            this.ScaleInRadio.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.ScaleInRadio.Appearance = System.Windows.Forms.Appearance.Button;
-            this.ScaleInRadio.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ScaleInRadio.Font = new System.Drawing.Font("Courier New", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ScaleInRadio.Location = new System.Drawing.Point(3, 165);
-            this.ScaleInRadio.Name = "ScaleInRadio";
-            this.ScaleInRadio.Size = new System.Drawing.Size(48, 48);
-            this.ScaleInRadio.TabIndex = 6;
-            this.ScaleInRadio.Tag = "ScaleIn";
-            this.ScaleInRadio.Text = "+";
-            this.ScaleInRadio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ScaleInRadio.UseVisualStyleBackColor = true;
-            this.ScaleInRadio.CheckedChanged += new System.EventHandler(this.Tools_Click);
             // 
             // EraserRadio
             // 
@@ -281,20 +249,38 @@
             // 
             // tableLayoutPanel2
             // 
-            tableLayoutPanel2.AutoSize = true;
             tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel1.SetColumnSpan(tableLayoutPanel2, 2);
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel2.Controls.Add(this.ThicknessBar, 0, 1);
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
             tableLayoutPanel2.Controls.Add(this.ThicknessText, 1, 0);
             tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             tableLayoutPanel2.Location = new System.Drawing.Point(3, 219);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new System.Drawing.Size(153, 29);
+            tableLayoutPanel2.Size = new System.Drawing.Size(153, 78);
             tableLayoutPanel2.TabIndex = 11;
+            // 
+            // ThicknessBar
+            // 
+            this.ThicknessBar.AutoSize = false;
+            tableLayoutPanel2.SetColumnSpan(this.ThicknessBar, 2);
+            this.ThicknessBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ThicknessBar.LargeChange = 1;
+            this.ThicknessBar.Location = new System.Drawing.Point(3, 32);
+            this.ThicknessBar.Maximum = 10000;
+            this.ThicknessBar.Minimum = 1;
+            this.ThicknessBar.Name = "ThicknessBar";
+            this.ThicknessBar.Size = new System.Drawing.Size(153, 43);
+            this.ThicknessBar.TabIndex = 16;
+            this.ThicknessBar.TabStop = false;
+            this.ThicknessBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.ThicknessBar.Value = 1;
+            this.ThicknessBar.ValueChanged += new System.EventHandler(this.ThicknessBar_ValueChanged);
             // 
             // label1
             // 
@@ -311,16 +297,15 @@
             // 
             this.ThicknessText.Dock = System.Windows.Forms.DockStyle.Right;
             this.ThicknessText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ThicknessText.Location = new System.Drawing.Point(119, 3);
+            this.ThicknessText.Location = new System.Drawing.Point(125, 3);
             this.ThicknessText.MaxLength = 3;
             this.ThicknessText.Name = "ThicknessText";
+            this.ThicknessText.ReadOnly = true;
             this.ThicknessText.Size = new System.Drawing.Size(31, 23);
             this.ThicknessText.TabIndex = 9;
             this.ThicknessText.TabStop = false;
             this.ThicknessText.Text = "1";
             this.ThicknessText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ThicknessText.TextChanged += new System.EventHandler(this.ThicknessText_TextChanged);
-            this.ThicknessText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ThicknessText_KeyPress);
             // 
             // FillCheck
             // 
@@ -329,7 +314,7 @@
             this.FillCheck.Dock = System.Windows.Forms.DockStyle.Top;
             this.FillCheck.Enabled = false;
             this.FillCheck.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.FillCheck.Location = new System.Drawing.Point(3, 254);
+            this.FillCheck.Location = new System.Drawing.Point(3, 303);
             this.FillCheck.Name = "FillCheck";
             this.FillCheck.Size = new System.Drawing.Size(153, 23);
             this.FillCheck.TabIndex = 12;
@@ -342,7 +327,7 @@
             this.tableLayoutPanel1.SetColumnSpan(this.AlphaBar, 2);
             this.AlphaBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AlphaBar.LargeChange = 1;
-            this.AlphaBar.Location = new System.Drawing.Point(3, 389);
+            this.AlphaBar.Location = new System.Drawing.Point(3, 438);
             this.AlphaBar.Maximum = 255;
             this.AlphaBar.Name = "AlphaBar";
             this.AlphaBar.Size = new System.Drawing.Size(153, 45);
@@ -357,7 +342,7 @@
             this.AlphaLabel.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.AlphaLabel, 2);
             this.AlphaLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.AlphaLabel.Location = new System.Drawing.Point(3, 437);
+            this.AlphaLabel.Location = new System.Drawing.Point(3, 486);
             this.AlphaLabel.Name = "AlphaLabel";
             this.AlphaLabel.Size = new System.Drawing.Size(123, 15);
             this.AlphaLabel.TabIndex = 16;
@@ -373,7 +358,7 @@
             this.tableLayoutPanel3.Controls.Add(this.BorderColorButton, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.FillColorButton, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.XchgButton, 1, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 283);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 332);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -555,53 +540,53 @@
             // MenuItemUndo
             // 
             this.MenuItemUndo.Name = "MenuItemUndo";
-            this.MenuItemUndo.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemUndo.Size = new System.Drawing.Size(148, 22);
             this.MenuItemUndo.Text = "&Отменить";
             this.MenuItemUndo.Click += new System.EventHandler(this.MenuItemUndo_Click);
             // 
             // MenuItemRedo
             // 
             this.MenuItemRedo.Name = "MenuItemRedo";
-            this.MenuItemRedo.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemRedo.Size = new System.Drawing.Size(148, 22);
             this.MenuItemRedo.Text = "В&ернуть";
             this.MenuItemRedo.Click += new System.EventHandler(this.MenuItemRedo_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(145, 6);
             // 
             // MenuItemCut
             // 
             this.MenuItemCut.Name = "MenuItemCut";
-            this.MenuItemCut.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemCut.Size = new System.Drawing.Size(148, 22);
             this.MenuItemCut.Text = "&Вырезать...";
             this.MenuItemCut.Visible = false;
             // 
             // MenuItemCopy
             // 
             this.MenuItemCopy.Name = "MenuItemCopy";
-            this.MenuItemCopy.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemCopy.Size = new System.Drawing.Size(148, 22);
             this.MenuItemCopy.Text = "&Копировать";
             this.MenuItemCopy.Visible = false;
             // 
             // MenuItemPaste
             // 
             this.MenuItemPaste.Name = "MenuItemPaste";
-            this.MenuItemPaste.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemPaste.Size = new System.Drawing.Size(148, 22);
             this.MenuItemPaste.Text = "В&ставить";
             this.MenuItemPaste.Visible = false;
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(145, 6);
             this.toolStripSeparator3.Visible = false;
             // 
             // MenuItemSelectAll
             // 
             this.MenuItemSelectAll.Name = "MenuItemSelectAll";
-            this.MenuItemSelectAll.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemSelectAll.Size = new System.Drawing.Size(148, 22);
             this.MenuItemSelectAll.Text = "В&ыделить все";
             this.MenuItemSelectAll.Visible = false;
             // 
@@ -753,11 +738,32 @@
             // 
             // OpenImageDialog
             // 
-            this.OpenImageDialog.FileName = "*.bmp";
-            this.OpenImageDialog.Filter = "Bitmap|*.bmp|Joint Picture Expert Group Format|*.jpg,*.jpeg,*.jfif|Graphcics Inte" +
-    "rchange Format|*.gif|Tagged Image File Format|*.tif,*.tiff|Portable Network Grap" +
+            this.OpenImageDialog.Filter = "Bitmap|*.bmp|Joint Picture Expert Group Format|*.jpg;*.jpeg;*.jfif|Graphcics Inte" +
+    "rchange Format|*.gif|Tagged Image File Format|*.tif;*.tiff|Portable Network Grap" +
     "hics|*.png|All Files|*.*";
             this.OpenImageDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenImageDialog_FileOk);
+            // 
+            // ScaleInButton
+            // 
+            this.ScaleInButton.Font = new System.Drawing.Font("Courier New", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ScaleInButton.Location = new System.Drawing.Point(3, 165);
+            this.ScaleInButton.Name = "ScaleInButton";
+            this.ScaleInButton.Size = new System.Drawing.Size(48, 48);
+            this.ScaleInButton.TabIndex = 18;
+            this.ScaleInButton.Text = "+";
+            this.ScaleInButton.UseVisualStyleBackColor = true;
+            this.ScaleInButton.Click += new System.EventHandler(this.ScaleInButton_CheckedChanged);
+            // 
+            // ScaleOuButton
+            // 
+            this.ScaleOuButton.Font = new System.Drawing.Font("Courier New", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ScaleOuButton.Location = new System.Drawing.Point(82, 165);
+            this.ScaleOuButton.Name = "ScaleOuButton";
+            this.ScaleOuButton.Size = new System.Drawing.Size(48, 48);
+            this.ScaleOuButton.TabIndex = 19;
+            this.ScaleOuButton.Text = "-";
+            this.ScaleOuButton.UseVisualStyleBackColor = true;
+            this.ScaleOuButton.Click += new System.EventHandler(this.ScaleOutRadio_CheckedChanged);
             // 
             // MainForm
             // 
@@ -776,6 +782,7 @@
             this.tableLayoutPanel1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ThicknessBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlphaBar)).EndInit();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
@@ -829,8 +836,6 @@
         private System.Windows.Forms.RadioButton StarRadio;
         private System.Windows.Forms.RadioButton EllipseRadio;
         private System.Windows.Forms.RadioButton EraserRadio;
-        private System.Windows.Forms.RadioButton ScaleInRadio;
-        private System.Windows.Forms.RadioButton ScaleOutRadio;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TextBox ThicknessText;
         private System.Windows.Forms.CheckBox FillCheck;
@@ -850,6 +855,9 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItemRotateCW;
         private System.Windows.Forms.ToolStripMenuItem MenuItemFlipHorz;
         private System.Windows.Forms.ToolStripMenuItem MenuItemFlipVert;
+        private System.Windows.Forms.TrackBar ThicknessBar;
+        private System.Windows.Forms.Button ScaleInButton;
+        private System.Windows.Forms.Button ScaleOuButton;
     }
 }
 

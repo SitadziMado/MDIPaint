@@ -49,8 +49,14 @@ namespace MDIPaint
             var fillColor = Color.FromArgb(
                 AlphaBar.Value, FillColorButton.BackColor
             );
+            
+            var thickness = 1 + (int)(
+                Math.Sqrt(ThicknessBar.Maximum) -
+                Math.Sqrt(ThicknessBar.Maximum - ThicknessBar.Value)
+            );
 
-            Tool.Thickness = int.Parse(ThicknessText.Text);
+            Tool.Thickness = thickness;
+            ThicknessText.Text = thickness.ToString();
             Tool.BorderColor = borderColor;
 
             if (Tool is FilledTool)
@@ -183,17 +189,6 @@ namespace MDIPaint
             ActiveMdiChild?.Close();
         }
 
-        private void ThicknessText_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar < '0' || e.KeyChar > '9')
-                e.Handled = true;
-        }
-
-        private void ThicknessText_TextChanged(object sender, EventArgs e)
-        {
-            UpdateTool();
-        }
-
         private void BorderColorButton_Click(object sender, EventArgs e)
         {
             ColorDialog.Color = BorderColorButton.BackColor;
@@ -298,5 +293,20 @@ namespace MDIPaint
         private void MenuItemFlipHorz_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).FlipHorizontal();
 
         private void MenuItemFlipVert_Click(object sender, EventArgs e) => (ActiveMdiChild as ChildForm).FlipVertical();
+
+        private void ThicknessBar_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateTool();
+        }
+
+        private void ScaleInButton_CheckedChanged(object sender, EventArgs e)
+        {
+            (ActiveMdiChild as ChildForm)?.Zoom(true);
+        }
+
+        private void ScaleOutRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            (ActiveMdiChild as ChildForm)?.Zoom(false);
+        }
     }
 }
